@@ -1,0 +1,10 @@
+source "http://rubygems.org"
+
+gem "activesupport"
+gem "actionmailer"
+gem "actionmailer_extensions"
+gem "json_pure"
+gem "uuidtools"
+gem "sonar_connector", :require=>"sonar_connector"
+gem "sonar_push_connector", :require=>"sonar_push_connector"
+gem "sonar_imap_pull_connector", :require=>"sonar_imap_pull_connector"
