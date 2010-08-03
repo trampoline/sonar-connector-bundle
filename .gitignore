@@ -2,3 +2,6 @@
 /vendor/bundle
 /Gemfile.lock
 /config/config.json
+/log
+/status.yml
+/var
