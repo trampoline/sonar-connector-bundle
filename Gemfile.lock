@@ -17,6 +17,11 @@ GEM
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
       uuidtools (>= 2.1.1)
+    sonar_exchange_pull_connector (0.5.5)
+      activesupport (>= 2.3.5)
+      json_pure (>= 1.2.2)
+      sonar_connector (>= 0.5.1)
+      sonar_rexchange (>= 0.3.7)
     sonar_imap_pull_connector (0.1.2)
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
@@ -25,10 +30,10 @@ GEM
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
       sonar_connector (>= 0.5.1)
+    sonar_rexchange (0.3.7)
     uuidtools (2.1.1)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
@@ -38,6 +43,7 @@ DEPENDENCIES
   jruby-openssl
   json_pure
   sonar_connector
+  sonar_exchange_pull_connector
   sonar_imap_pull_connector
   sonar_push_connector
   uuidtools
