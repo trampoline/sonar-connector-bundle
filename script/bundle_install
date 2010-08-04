@@ -1,2 +1,2 @@
 #!/bin/bash
-bundle install vendor/bundle --local
+bundle install vendor/bundle --local --no-prune --no-cache
