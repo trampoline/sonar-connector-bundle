@@ -1,2 +1,2 @@
 #!/bin/bash
-bundle exec java -jar lib/jruby-complete-1.5.1.jar -e "require 'sonar_connector' ; c=Sonar::Connector::Controller.new('config/config.json') ; c.start"
+bundle exec java -jar lib/jruby-complete.jar -e "require 'sonar_connector' ; c=Sonar::Connector::Controller.new('config/config.json') ; c.start"
