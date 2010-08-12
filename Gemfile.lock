@@ -18,7 +18,7 @@ GEM
       json_pure (>= 1.2.2)
       sonar_connector_filestore (>= 0.1.0)
       uuidtools (>= 2.1.1)
-    sonar_connector_filestore (0.1.6)
+    sonar_connector_filestore (0.1.7)
     sonar_exchange_pull_connector (0.5.5)
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
