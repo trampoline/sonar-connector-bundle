@@ -11,7 +11,7 @@ GEM
     jruby-openssl (0.7)
     json_pure (1.4.3)
     rack (1.1.0)
-    sonar_connector (0.6.2)
+    sonar_connector (0.6.3)
       actionmailer (>= 2.3.5)
       actionmailer_extensions (>= 0.4.0)
       activesupport (>= 2.3.5)
@@ -36,6 +36,7 @@ GEM
     uuidtools (2.1.1)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
