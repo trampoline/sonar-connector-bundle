@@ -1,2 +1,7 @@
 #!/bin/bash
+DIR=`pwd`
+cd vendor/bundle
+ln -fs ruby jruby
+cd ${DIR}
+echo `pwd`
 java -jar lib/jruby-complete.jar -e "require 'lib/jruby_boot'"
