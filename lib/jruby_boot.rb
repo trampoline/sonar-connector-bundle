@@ -1,4 +1,4 @@
-BUNDLER_VERSION = "bundler-1.0.0.beta.2"
+BUNDLER_VERSION = "bundler-1.0.0"
 
 BUNDLER_PATH = "file:#{File.expand_path("lib/jruby-complete.jar", Dir.pwd)}!/META-INF/jruby.home/lib/ruby/gems/1.8/gems/#{BUNDLER_VERSION}/lib"
 
