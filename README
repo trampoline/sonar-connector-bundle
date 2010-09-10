@@ -1,1 +1,33 @@
-a bundle of gems for a sonar-connector installation
+A bundle of gems for a sonar-connector installation.
+
+INSTALLATION
+
+JRuby and bundler cannot be used for installation of the bundle due to a bug in JRuby regarding tar files.
+Therefore, we install the bundle using system ruby, bodge the installation to work with JRuby, 
+and run the connector using JRuby. 
+
+1. Use native system ruby (or RVM) and bundler gem to install bundle
+
+Check that you have the bundler gem
+
+$ gem list bundler
+
+*** LOCAL GEMS ***
+bundler (1.0.0)
+
+2. Install bundle
+./script/bundle_install
+
+3. Perform magic
+
+>insert bodge here<
+
+4. Create a config file
+
+cp config/config.json.example config/config.json
+
+Edit config file accordingly.
+
+5. Start the connector
+
+./script/start
