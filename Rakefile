@@ -1,8 +1,15 @@
+BUNDLER_VERSION = "bundler-1.0.0"
+JRUBY_FILENAME = "jruby-complete-1.5.2-bundler-1.0.0.jar"
+
 CURRENT_DIR = File.dirname(__FILE__)
+
 BUILD_DIR = File.join(CURRENT_DIR, "build")
 BUILD_BUNDLE_DIR = File.join(BUILD_DIR, "vendor", "bundle")
 
-FILE_LIST = ["config", "Gemfile", "lib", "script", "vendor"]
+LIB_DIR = File.join(CURRENT_DIR, "lib")
+BUILD_LIB_DIR = File.join(BUILD_DIR, "lib")
+
+FILE_LIST = ["config", "Gemfile", "script", "vendor"]
 
 task :default => :build
 
@@ -10,6 +17,16 @@ desc "Build Windows deployment"
 task :build => [:clean, :copy, :wipe_build_bundle, :install_build_bundle] do
   puts "Moving vendor/bundle/ruby to vendor/bundle/jruby"
   FileUtils.mv File.join(BUILD_BUNDLE_DIR, "ruby"), File.join(BUILD_BUNDLE_DIR, "jruby")
+  
+  puts "Copying #{JRUBY_FILENAME} to jruby-complete.jar"
+  FileUtils.mkdir_p File.join(BUILD_DIR, "lib")
+  FileUtils.cp File.join(LIB_DIR, JRUBY_FILENAME), File.join(BUILD_LIB_DIR, "jruby-complete.jar")
+  
+  puts "Creating jruby_boot.rb from template file"
+  t = File.read File.join(LIB_DIR, "jruby_boot.rb.template")
+  t.gsub!("{{bundler_version}}", BUNDLER_VERSION)
+  File.open(File.join(BUILD_LIB_DIR, 'jruby_boot.rb'), "w"){|f| f << t}
+  
   puts "Done!"
 end
 

@@ -1,33 +1,84 @@
 A bundle of gems for a sonar-connector installation.
 
-INSTALLATION
+INTRODUCTION
 
-JRuby and bundler cannot be used for installation of the bundle due to a bug in JRuby regarding tar files.
-Therefore, we install the bundle using system ruby, bodge the installation to work with JRuby, 
-and run the connector using JRuby. 
+JRuby and bundler cannot be used for installation of the bundle due to a bug in JRuby regarding tar files, 
+as well as the weird behaviour between JRuby and bundler.
 
-1. Use native system ruby (or RVM) and bundler gem to install bundle
+Therefore, we build the bundle using system ruby, and wire all the paths to use JRuby on the target system.
+This way, the target system only needs to have Java installed. No system ruby and no gems required at runtime.
 
-Check that you have the bundler gem
+HOW TO BUILD THE CONNECTOR
 
-$ gem list bundler
+Prerequisites:
 
-*** LOCAL GEMS ***
-bundler (1.0.0)
+1. System ruby (or rvm ruby)
+2. bundler gem
+3. rake gem
 
-2. Install bundle
-./script/bundle_install
+Build steps:
 
-3. Perform magic
+1. Set constants
 
->insert bodge here<
+Edit Rakefile and set these to the correct values, e.g.:
 
-4. Create a config file
+BUNDLER_VERSION = "bundler-1.0.0"
+JRUBY_FILENAME = "jruby-complete-1.5.2-bundler-1.0.0.jar"
 
-cp config/config.json.example config/config.json
+2. Build the connector bundle
 
-Edit config file accordingly.
+$ rake build
 
-5. Start the connector
+3. Zip up the contents of ./build and ship to the customer
 
-./script/start
+
+HOW TO INSTALL THE BUNDLE ON WINDOWS
+
+Prerequisites:
+
+1. Windows 2003 Server Resource Kit 
+  Available at: http://www.microsoft.com/downloads/en/details.aspx?FamilyID=9d467a69-57ff-4ae7-96ee-b18c4790cffd&displaylang=en
+  Or in the bundle at ./vendor/windows_server_resource_kit/rktools.exe
+
+2. Java 6
+
+Install steps:
+
+(to be wired into an installer)
+
+1. Unpack the bundle archive
+
+Move or copy the local ./build dir to the target system, e.g. to folder c:\SonarConnector
+
+2. Stop the connector service in case it's running
+
+c:\connector> net stop SonarConnector
+
+3. Install the service
+
+"c:\Program Files (x86)\Windows Resource Kits\Tools\instsrv.exe" SonarConnector REMOVE
+"c:\Program Files (x86)\Windows Resource Kits\Tools\instsrv.exe" SonarConnector "c:\Program Files (x86)\Windows Resource Kits\Tools\srvany.exe"
+
+4. Edit the registry key
+
+Edit this file: ./config/SonarConnector.reg
+
+Set correct paths to the connector install directory, and the start.bat file. Note the double backslash
+characters in the reg file, due to the retarded way Windows handles escaping.
+
+5. Install the registry key
+
+Double-click or open the file ./config/SonarConnector.reg in Windows
+
+6. Set JAVA_HOME 
+
+Edit the file ./script/start.bat and ensure that JAVA_HOME points to the correct location.
+
+7. Start the service
+
+c:\connector> net start SonarConnector
+
+8. Monitor the log file output
+
+Check c:\SonarConnector\log\controller.log to ensure the connector booted up ok.
+
