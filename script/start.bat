@@ -1,0 +1,1 @@
+java -jar ../lib/jruby-complete.jar -e "require 'lib/jruby_boot'"
