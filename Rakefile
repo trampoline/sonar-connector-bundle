@@ -11,7 +11,7 @@ TARGET_BUNDLE_DIR = File.join TARGET_DIR, "vendor", "bundle"
 LIB_DIR = File.join CURRENT_DIR, "lib"
 TARGET_LIB_DIR = File.join TARGET_DIR, "lib"
 
-FILE_LIST = ["config", "Gemfile", "script", "vendor"]
+FILE_LIST = ["config", "Gemfile", "LICENSE", "script", "vendor"]
 
 task :default => :build
 
