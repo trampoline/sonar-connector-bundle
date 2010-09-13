@@ -35,6 +35,13 @@ task :build => [:clean, :copy, :wipe_build_bundle, :install_build_bundle] do
     `zip -r #{TARGET_DIR}.zip #{TARGET_NAME}`
   }
   
+  if `which makensis` == ''
+    puts "warning: can't compile the installer executable without the NSIS compiler!"
+  else
+    puts "Building the installer executable"
+    system('makensis installer/connector.nsi')
+  end
+  
   puts "Done!"
 end
 
