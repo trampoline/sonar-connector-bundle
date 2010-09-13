@@ -88,8 +88,8 @@ Section "MainSection" SEC01
   # Write registry keys for srvany.exe startup parameters
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector" "Description" "Trampoline Systems Sonar Connector"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "AppDirectory" "$INSTDIR"
-  WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "Application" "$INSTDIR\script\start.bat"
-
+  WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "Application" `"$jreDir\bin\java.exe" -jar lib\jruby-complete.jar -e "require 'lib/jruby_boot'"`
+  
   # Write a new start.bat file and do inline replace on java_home var
   
   CopyFiles $INSTDIR\template\start.bat $INSTDIR\script\start.bat
