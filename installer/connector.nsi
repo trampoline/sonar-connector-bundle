@@ -18,25 +18,31 @@
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
+# Variables
+Var dialog
+Var label
+Var browseButton
+Var jreDirRequest
+Var toolkitDirRequest
+Var jreDir
+Var toolkitDir
+
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !insertmacro MUI_PAGE_LICENSE "..\build\SonarConnector\LICENSE"
 
 ; Locate the Server Resource Kit - we need this to continue
-Page custom nsLocateJrePage
+Page custom jrePageCreate jrePageLeave
 
 ; Locate the Server Toolkit
-Page custom nsLocateToolkitPage
-
-
-; Debug page
-Page custom nsDebugPage
+Page custom toolkitPageCreate toolkitPageLeave
 
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
+
 ; Finish page
 !insertmacro MUI_PAGE_FINISH
 
@@ -55,9 +61,34 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Section "MainSection" SEC01
+
   SetOutPath "$INSTDIR\"
   SetOverwrite try
-  File /r "..\build\SonarConnector\config"
+  
+  DetailPrint "Stopping service..."
+  ExecWait "cmd.exe /C net stop SonarConnector" $0
+  DetailPrint " ... exit code = $0"
+  
+  DetailPrint "Removing service..."
+  ExecWait '"$toolkitDir\instsrv.exe" SonarConnector REMOVE' $0
+  DetailPrint '... exit code = $0'
+  
+  File /r "..\build\SonarConnector\script"
+  
+  DetailPrint "Creating service..."
+  ExecWait '"$toolkitDir\instsrv.exe" SonarConnector "$toolkitDir\srvany.exe"' $0
+  DetailPrint " ... exit code = $0"
+
+  WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector" "Description" "Trampoline Systems Sonar Connector"
+  WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "AppDirectory" "$INSTDIR"
+  WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "Application" "$INSTDIR\script\start.bat"
+
+  DetailPrint "Starting service..."
+  ExecWait "cmd.exe /C net start SonarConnector" $0
+  DetailPrint '... exit code = $0'
+
+  Sleep 15000
+
 SectionEnd
 
 Section -Post
@@ -70,28 +101,27 @@ Section -Post
 SectionEnd
 
 
-# Variables for nsLocateJrePage and nsLocateToolkitPage
-Var dialog
-Var label
-Var browseButton
-Var jreDirRequest
-Var toolkitDirRequest
 
-Function nsLocateJrePage
+Function jrePageCreate
   nsDialogs::Create 1018
 	Pop $dialog
+	
+	#Caption "Locate JRE"
+  #SubCaption "The Java JRE is a prerequisite for the Sonar Connector. Please locate it on disk."
 
 	${If} $dialog == error
 		Abort
 	${EndIf}
-	
+
 	${NSD_CreateLabel} 0 0 100% 12u "Please locate the JAVA_HOME directory"
 	Pop $label
 
-	${NSD_CreateDirRequest} 20 70 248 20 ""
+  # Try to populate jreDirRequest with JAVA_HOME env variable
+  ReadEnvStr $jreDir "JAVA_HOME"
+  
+	${NSD_CreateDirRequest} 20 70 248 20 $jreDir
   Pop $jreDirRequest
-  ${NSD_SetText} $jreDirRequest ""
-
+ 
   ${NSD_CreateBrowseButton} 270 69 50 20 "Browse"
   Pop $browseButton
   ${NSD_OnClick} $browseButton OnJreDirBrowseButton
@@ -114,25 +144,38 @@ Function OnJreDirBrowseButton
   ${EndIf}
 FunctionEnd
 
+Function jrePageLeave
+  ${NSD_GetText} $jreDirRequest $jreDir
+  
+  ${If} $jreDir == ""
+    MessageBox mb_iconstop "Please choose a directory."
+    Abort
+  ${EndIf}
+  ${IfNot} ${FileExists} "$jreDir\bin\java.exe"
+    MessageBox mb_iconstop "$jreDir\bin\java.exe not found - incorrect JAVA_HOME dir."
+    Abort
+  ${EndIf}
+FunctionEnd
 
-# ----------------------
 
-Function nsLocateToolkitPage
+Function toolkitPageCreate
   nsDialogs::Create 1018
 	Pop $dialog
+
+  #Caption "Locate the Windows Server Resource Kit"
+  #SubCaption "The Windows Server Resource Kit is a prerequisite for the Sonar Connector. Please locate it."
 
 	${If} $dialog == error
 		Abort
 	${EndIf}
 
-	${NSD_CreateLabel} 0 0 100% 15u "Please locate the installation directory of the Windows Server Resource Kit. If not installed you can download here: http://www.microsoft.com/downloads/en/details.aspx?FamilyID=9d467a69-57ff-4ae7-96ee-b18c4790cffd&displaylang=en"
+	${NSD_CreateLabel} 0 0 100% 40 "Please locate the installation directory of the Windows Server Resource Kit."
 	Pop $label
 
-	${NSD_CreateDirRequest} 20 70 248 20 ""
+	${NSD_CreateDirRequest} 20 90 248 20 "C:\Program Files (x86)\Windows Resource Kits\Tools"
   Pop $toolkitDirRequest
-  ${NSD_SetText} $toolkitDirRequest ""
 
-  ${NSD_CreateBrowseButton} 270 69 50 20 "Browse"
+  ${NSD_CreateBrowseButton} 270 89 50 20 "Browse"
   Pop $browseButton
   ${NSD_OnClick} $browseButton OnToolkitDirBrowseButton
 
@@ -155,26 +198,22 @@ Function OnToolkitDirBrowseButton
 FunctionEnd
 
 
-Var debugLabel1
-Var debugLabel2
-Function nsDebugPage
-  nsDialogs::Create 1018
-	Pop $dialog
-
-	${If} $dialog == error
-		Abort
-	${EndIf}
-
-	${NSD_CreateLabel} 0 0 100% 12u "Debug output:"
-	Pop $label
-	
-	strcpy $0 "prefix $toolkitDirRequest suffix"
-	${NSD_CreateLabel} 0 0 100% 12u $toolkitDirRequest
-	Pop $label
-
-	nsDialogs::Show
+Function toolkitPageLeave
+  ${NSD_GetText} $toolkitDirRequest $toolkitDir
+  
+  ${If} $toolkitDir == ""
+    MessageBox mb_iconstop "Please choose a directory."
+    Abort
+  ${EndIf}
+  ${IfNot} ${FileExists} "$toolkitDir\srvany.exe"
+    MessageBox mb_iconstop "$toolkitDir\srvany.exe not found - incorrect toolkit dir."
+    Abort
+  ${EndIf}
+    ${IfNot} ${FileExists} "$toolkitDir\instsrv.exe"
+    MessageBox mb_iconstop "$toolkitDir\instsrv.exe not found - incorrect toolkit dir."
+    Abort
+  ${EndIf}
 FunctionEnd
-
 
 
 Function un.onUninstSuccess
