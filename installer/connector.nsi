@@ -12,7 +12,9 @@
 !include "MUI.nsh"
 !include "LogicLib.nsh"
 !include "nsDialogs.nsh"
-
+!include "StrRep.nsh"
+!include "ReplaceInFile.nsh"
+  
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
@@ -55,7 +57,7 @@ Page custom toolkitPageCreate toolkitPageLeave
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Setup.exe"
+OutFile "..\build\SonarConnectorSetup.exe"
 InstallDir "$PROGRAMFILES\Sonar Connector"
 ShowInstDetails show
 ShowUnInstDetails show
@@ -73,21 +75,30 @@ Section "MainSection" SEC01
   ExecWait '"$toolkitDir\instsrv.exe" SonarConnector REMOVE' $0
   DetailPrint '... exit code = $0'
   
-  File /r "..\build\SonarConnector\script"
+  File /r "..\build\SonarConnector\"
   
+  # Shortened file list for debugging
+  # File /r "..\build\SonarConnector\script"
+  # File /r "..\build\SonarConnector\template"
+
   DetailPrint "Creating service..."
   ExecWait '"$toolkitDir\instsrv.exe" SonarConnector "$toolkitDir\srvany.exe"' $0
   DetailPrint " ... exit code = $0"
 
+  # Write registry keys for srvany.exe startup parameters
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector" "Description" "Trampoline Systems Sonar Connector"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "AppDirectory" "$INSTDIR"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "Application" "$INSTDIR\script\start.bat"
 
+  # Write a new start.bat file and do inline replace on java_home var
+  
+  CopyFiles $INSTDIR\template\start.bat $INSTDIR\script\start.bat
+  !insertmacro ReplaceInFile "$INSTDIR\script\start.bat" "{{java_home}}" $jreDir
+  
+  # Start the service
   DetailPrint "Starting service..."
   ExecWait "cmd.exe /C net start SonarConnector" $0
   DetailPrint '... exit code = $0'
-
-  Sleep 15000
 
 SectionEnd
 
