@@ -1,2 +1,3 @@
 #!/bin/bash
 bundle install vendor/bundle --local --no-prune --no-cache
+cp -R vendor/bundle/ruby vendor/bundle/jruby
