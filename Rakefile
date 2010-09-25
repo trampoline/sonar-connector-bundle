@@ -14,6 +14,7 @@ TARGET_LIB_DIR = File.join TARGET_DIR, "lib"
 FILE_LIST = ["config", "Gemfile", "LICENSE", "script", "vendor"]
 
 LOCAL_SOURCE_GEMS = {
+  "actionmailer_extensions" => "~/development/archived/actionmailer_extensions",
   "sonar_connector" => "../sonar-connector",
   "sonar_connector_filestore" => "../sonar-connector-filestore",
   "sonar_imap_pull_connector" => "../sonar-imap-pull-connector",
