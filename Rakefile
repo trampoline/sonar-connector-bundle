@@ -13,6 +13,16 @@ TARGET_LIB_DIR = File.join TARGET_DIR, "lib"
 
 FILE_LIST = ["config", "Gemfile", "LICENSE", "script", "vendor"]
 
+LOCAL_SOURCE_GEMS = {
+  "actionmailer_extensions" => "~/development/archived/actionmailer_extensions",
+  "sonar_connector" => "../sonar-connector",
+  "sonar_connector_filestore" => "../sonar-connector-filestore",
+  "sonar_imap_pull_connector" => "../sonar-imap-pull-connector",
+  "sonar_push_connector" => "../sonar-push-connector"
+}
+VENDOR_CACHE_DIR = File.join CURRENT_DIR, 'vendor', 'cache'
+
+
 task :default => :build
 
 desc "Build Windows deployment"
@@ -73,3 +83,25 @@ task :install_build_bundle do
   puts "Installing the build bundle"
   `cd #{TARGET_DIR}; bundle install vendor/bundle --local --no-prune --no-cache`
 end
+
+desc "Re-build all of the LOCAL_SOURCE_GEMS and freshen the vendor cache with them"
+task :freshen_local_source_gems do
+  puts "Re-building LOCAL_SOURCE_GEMS and freshening the vendor cache"
+  LOCAL_SOURCE_GEMS.each do |gem_name, path|
+    
+    f = File.expand_path path
+    
+    # build the source gem
+    FileUtils.cd(f) {
+      puts "Cleaning and rebuilding gem inside #{f}"
+      FileUtils.rm_rf File.join('.', 'pkg')
+      `rake build`
+    }
+    
+    puts "Refreshing gem #{gem_name} in #{VENDOR_CACHE_DIR}"
+    FileUtils.rm_f File.join(VENDOR_CACHE_DIR, "#{gem_name}*")
+    FileUtils.cp_r Dir.glob(File.join f, "pkg", "*"), VENDOR_CACHE_DIR
+    
+  end
+end
+
