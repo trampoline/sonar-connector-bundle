@@ -82,3 +82,4 @@ c:\connector> net start SonarConnector
 
 Check c:\SonarConnector\log\controller.log to ensure the connector booted up ok.
 
+Copyright (c) 2010 Trampoline Systems Ltd. See LICENSE for details.
