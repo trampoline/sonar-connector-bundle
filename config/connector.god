@@ -2,6 +2,7 @@
 
 CONNECTOR_ROOT = File.expand_path(File.join File.dirname(__FILE__), '..')
 God.pid_file_directory = File.join CONNECTOR_ROOT, 'var', 'pids'
+FileUtils.mkdir_p God.pid_file_directory
 
 God.watch do |w|
   w.name = "sonar-connector"
