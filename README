@@ -12,7 +12,7 @@ HOW TO BUILD THE CONNECTOR
 
 Prerequisites:
 
-1. System ruby (or rvm ruby)
+1. System or rvm ruby
 2. bundler gem
 3. rake gem
 
