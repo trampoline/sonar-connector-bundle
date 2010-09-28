@@ -8,7 +8,7 @@ God.watch do |w|
   w.name = "sonar-connector"
   w.interval = 30.seconds # default      
   
-  w.start = %Q{exec java -jar #{CONNECTOR_ROOT}/lib/jruby-complete.jar -e "require '#{CONNECTOR_ROOT}/lib/jruby_boot'" 2>&1 > #{CONNECTOR_ROOT}/log/stdout_stderr.log}
+  w.start = %Q{exec java -jar #{CONNECTOR_ROOT}/lib/jruby-complete.jar -e "require '#{CONNECTOR_ROOT}/lib/jruby_boot'" > #{CONNECTOR_ROOT}/log/stdout_stderr.log 2>&1}
   # w.stop = "kill `cat #{File.join God.pid_file_directory, w.name + '.pid'}`"
   # w.restart = nil # restart is a call to stop followed by a call to start
   # w.pid_file = nil # no pid file cos we want god to daemonize this process for us
