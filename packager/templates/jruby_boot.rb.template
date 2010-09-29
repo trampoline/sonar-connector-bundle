@@ -1,4 +1,4 @@
-BUNDLER_VERSION = "bundler-1.0.0"
+BUNDLER_VERSION = "{{bundler_version}}"
 
 CONNECTOR_ROOT = File.expand_path File.join('..', '..'), __FILE__
 Dir.chdir CONNECTOR_ROOT

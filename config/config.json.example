@@ -63,9 +63,16 @@
       "require": "sonar_push_connector",
       "name": "sonar_push",
       "repeat_delay": 10,
-      "source_connector": "imap_gmail",
+      "source_connectors": ["imap_gmail"],
       "uri": "http://localhost:3000/api/1_0/rfc822_messages",
       "connector_credentials": "blahblah"
+    },
+    
+    {
+      "class": "Sonar::Connector::SeppukuConnector",
+      "name": "seppuku",
+      "repeat_delay": 43200,
+      "enabled": true
     }
   ] 
 }

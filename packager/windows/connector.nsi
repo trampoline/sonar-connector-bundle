@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Sonar Connector"
-!define PRODUCT_VERSION "0.6.6"
+!define PRODUCT_VERSION "0.8.0"
 !define PRODUCT_PUBLISHER "Trampoline Systems"
 !define PRODUCT_WEB_SITE "http://www.trampolinesystems.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -32,7 +32,7 @@ Var toolkitDir
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "..\build\SonarConnector\LICENSE"
+!insertmacro MUI_PAGE_LICENSE "..\..\build\SonarConnector\LICENSE"
 
 ; Locate the Server Resource Kit - we need this to continue
 Page custom jrePageCreate jrePageLeave
@@ -57,7 +57,7 @@ Page custom toolkitPageCreate toolkitPageLeave
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "..\build\SonarConnectorSetup.exe"
+OutFile "..\..\build\SonarConnectorSetup.exe"
 InstallDir "$PROGRAMFILES\Sonar Connector"
 ShowInstDetails show
 ShowUnInstDetails show
@@ -75,7 +75,7 @@ Section "MainSection" SEC01
   ExecWait '"$toolkitDir\instsrv.exe" SonarConnector REMOVE' $0
   DetailPrint '... exit code = $0'
   
-  File /r "..\build\SonarConnector\"
+  File /r "..\..\build\SonarConnector\"
   
   # Shortened file list for debugging
   # File /r "..\build\SonarConnector\script"

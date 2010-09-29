@@ -1,4 +1,10 @@
-A bundle of gems for a sonar-connector installation.
+DESCRIPTION
+
+A bundle of gems for a sonar-connector installation. This bundle can be used in three ways:
+
+1. Run directly on a linux-based system
+2. Build a windows deployment package
+3. Build a linux deployment package
 
 INTRODUCTION
 
