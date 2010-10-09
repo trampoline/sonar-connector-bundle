@@ -28,10 +28,9 @@ task :default do
 end
 
 namespace :build do
-  desc "build Windows deployment"
-  task :windows => [:clean, :copy, :wipe_build_bundle, :install_build_bundle] do
-    puts "building Windows deployment"
-    
+  
+  desc "pre build steps for both Windows and Linux deployments"
+  task :pre => [:clean, :copy, :wipe_build_bundle, :install_build_bundle] do
     puts "Moving vendor/bundle/ruby to vendor/bundle/jruby"
     FileUtils.mv File.join(TARGET_BUNDLE_DIR, "ruby"), File.join(TARGET_BUNDLE_DIR, "jruby")
   
@@ -43,12 +42,12 @@ namespace :build do
     t = File.read File.join(TEMPLATE_DIR, "jruby_boot.rb.template")
     t.gsub!("{{bundler_version}}", BUNDLER_VERSION)
     File.open(File.join(TARGET_LIB_DIR, 'jruby_boot.rb'), "w"){|f| f << t}
+  end
   
-    puts "Zipping the build"
-    FileUtils.cd(BUILD_DIR) {
-      `zip -r #{TARGET_DIR}.zip #{TARGET_NAME}`
-    }
-  
+  desc "build Windows deployment"
+  task :windows => ['build:pre'] do
+    puts "building Windows deployment"
+    
     if `which makensis` == ''
       puts "warning: can't compile the installer executable without the NSIS compiler!"
     else
@@ -60,8 +59,15 @@ namespace :build do
   end
   
   desc "build Linux deployment"
-  task :linux => [:clean, :copy, :wipe_build_bundle, :install_build_bundle] do
+  task :linux => ['build:pre'] do
     puts "building Linux deployment"
+    puts "Zipping the build"
+    
+    FileUtils.cd(BUILD_DIR) {
+      `tar cfvz #{TARGET_NAME}.tar.gz #{TARGET_NAME}`
+    }
+    
+    puts "Done!"
   end
 end
 
