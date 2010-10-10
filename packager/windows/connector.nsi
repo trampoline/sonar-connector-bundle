@@ -14,6 +14,7 @@
 !include "nsDialogs.nsh"
 !include "StrRep.nsh"
 !include "ReplaceInFile.nsh"
+!include "winmessages.nsh"
   
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -25,9 +26,10 @@ Var dialog
 Var label
 Var browseButton
 Var jreDirRequest
-Var toolkitDirRequest
 Var jreDir
-Var toolkitDir
+Var hwnd
+Var systemType
+Var nssmExe
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -37,8 +39,8 @@ Var toolkitDir
 ; Locate the Server Resource Kit - we need this to continue
 Page custom jrePageCreate jrePageLeave
 
-; Locate the Server Toolkit
-Page custom toolkitPageCreate toolkitPageLeave
+; Choose 32 or 64 bit
+Page custom systemTypeCreate systemTypeLeave
 
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
@@ -63,7 +65,7 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Section "MainSection" SEC01
-
+  
   SetOutPath "$INSTDIR\"
   SetOverwrite try
   
@@ -72,28 +74,24 @@ Section "MainSection" SEC01
   DetailPrint " ... exit code = $0"
   
   DetailPrint "Removing service..."
-  ExecWait '"$toolkitDir\instsrv.exe" SonarConnector REMOVE' $0
+  ExecWait '"$nssmExe" remove SonarConnector confirm' $0
   DetailPrint '... exit code = $0'
   
   File /r "..\..\build\SonarConnector\"
   
   # Shortened file list for debugging
-  # File /r "..\build\SonarConnector\script"
-  # File /r "..\build\SonarConnector\template"
+  # File /r "..\..\build\SonarConnector\config"
+  # File /r "..\..\build\SonarConnector\script"
+  # File /r "..\..\build\SonarConnector\tools"
 
   DetailPrint "Creating service..."
-  ExecWait '"$toolkitDir\instsrv.exe" SonarConnector "$toolkitDir\srvany.exe"' $0
+  ExecWait '"$nssmExe" install SonarConnector placeholderApplication' $0
   DetailPrint " ... exit code = $0"
 
-  # Write registry keys for srvany.exe startup parameters
+  # Write registry keys for service startup parameters
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector" "Description" "Trampoline Systems Sonar Connector"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "AppDirectory" "$INSTDIR"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\services\SonarConnector\Parameters" "Application" `"$jreDir\bin\java.exe" -jar lib\jruby-complete.jar -e "require 'lib/jruby_boot'"`
-  
-  # Write a new start.bat file and do inline replace on java_home var
-  
-  CopyFiles $INSTDIR\template\start.bat $INSTDIR\script\start.bat
-  !insertmacro ReplaceInFile "$INSTDIR\script\start.bat" "{{java_home}}" $jreDir
   
   # Start the service
   DetailPrint "Starting service..."
@@ -115,29 +113,29 @@ SectionEnd
 
 Function jrePageCreate
   nsDialogs::Create 1018
-	Pop $dialog
-	
-	#Caption "Locate JRE"
+  Pop $dialog
+  
+  #Caption "Locate JRE"
   #SubCaption "The Java JRE is a prerequisite for the Sonar Connector. Please locate it on disk."
 
-	${If} $dialog == error
-		Abort
-	${EndIf}
+  ${If} $dialog == error
+    Abort
+  ${EndIf}
 
-	${NSD_CreateLabel} 0 0 100% 12u "Please locate the JAVA_HOME directory"
-	Pop $label
+  ${NSD_CreateLabel} 0 0 100% 12u "Please locate the JAVA_HOME directory"
+  Pop $label
 
   # Try to populate jreDirRequest with JAVA_HOME env variable
   ReadEnvStr $jreDir "JAVA_HOME"
   
-	${NSD_CreateDirRequest} 20 70 248 20 $jreDir
+  ${NSD_CreateDirRequest} 20 70 248 20 $jreDir
   Pop $jreDirRequest
  
   ${NSD_CreateBrowseButton} 270 69 50 20 "Browse"
   Pop $browseButton
   ${NSD_OnClick} $browseButton OnJreDirBrowseButton
-	
-	nsDialogs::Show
+  
+  nsDialogs::Show
 FunctionEnd
 
 
@@ -169,63 +167,55 @@ Function jrePageLeave
 FunctionEnd
 
 
-Function toolkitPageCreate
+Function systemTypeCreate 
+
+  StrCpy $systemType ""
+
   nsDialogs::Create 1018
-	Pop $dialog
+  Pop $dialog
 
-  #Caption "Locate the Windows Server Resource Kit"
-  #SubCaption "The Windows Server Resource Kit is a prerequisite for the Sonar Connector. Please locate it."
-
-	${If} $dialog == error
-		Abort
-	${EndIf}
-
-	${NSD_CreateLabel} 0 0 100% 40 "Please locate the installation directory of the Windows Server Resource Kit."
-	Pop $label
-
-	${NSD_CreateDirRequest} 20 90 248 20 "C:\Program Files (x86)\Windows Resource Kits\Tools"
-  Pop $toolkitDirRequest
-
-  ${NSD_CreateBrowseButton} 270 89 50 20 "Browse"
-  Pop $browseButton
-  ${NSD_OnClick} $browseButton OnToolkitDirBrowseButton
-
-	nsDialogs::Show
-FunctionEnd
-
-
-Function OnToolkitDirBrowseButton
-  Pop $R0
-  ${If} $R0 == $browseButton
-    ${NSD_GetText} $toolkitDirRequest $R0
-    nsDialogs::SelectFolderDialog /NOUNLOAD "" $R0
-    Pop $R0
-
-    ${If} $R0 != error
-      ${NSD_SetText} $toolkitDirRequest "$R0"
-    ${EndIf}
-
+  ${If} $dialog == error
+    Abort
   ${EndIf}
-FunctionEnd
 
-
-Function toolkitPageLeave
-  ${NSD_GetText} $toolkitDirRequest $toolkitDir
+  ${NSD_CreateLabel} 0 0 100% 40 "Is this a 32-bit or 64-bit installation of Windows?"
+  Pop $label
   
-  ${If} $toolkitDir == ""
-    MessageBox mb_iconstop "Please choose a directory."
-    Abort
-  ${EndIf}
-  ${IfNot} ${FileExists} "$toolkitDir\srvany.exe"
-    MessageBox mb_iconstop "$toolkitDir\srvany.exe not found - incorrect toolkit dir."
-    Abort
-  ${EndIf}
-    ${IfNot} ${FileExists} "$toolkitDir\instsrv.exe"
-    MessageBox mb_iconstop "$toolkitDir\instsrv.exe not found - incorrect toolkit dir."
-    Abort
-  ${EndIf}
+  ${NSD_CreateRadioButton} 0 20% 40% 6% "32-bit"
+  Pop $hwnd
+  ${NSD_AddStyle} $hwnd ${WS_GROUP}
+  ${NSD_OnClick} $hwnd RadioButton32Bit
+  
+  ${NSD_CreateRadioButton} 0 32% 40% 6% "64-bit"
+  Pop $hwnd
+  ${NSD_OnClick} $hwnd RadioButton64Bit
+  
+  nsDialogs::Show
 FunctionEnd
 
+Function RadioButton32Bit
+  Pop $hwnd
+  StrCpy $systemType "32"
+FunctionEnd
+
+Function RadioButton64Bit
+  Pop $hwnd
+  StrCpy $systemType "64"
+FunctionEnd
+
+Function systemTypeLeave
+  ${If} $systemType == ""
+    MessageBox mb_iconstop "Please choose a system type."
+    Abort
+  ${EndIf}
+  
+  ${If} $systemType == "32"
+    StrCpy $nssmExe "$INSTDIR\tools\nssm\win32\nssm.exe"
+  ${Else}
+    StrCpy $nssmExe "$INSTDIR\tools\nssm\win64\nssm.exe"
+  ${EndIf}
+  
+FunctionEnd
 
 Function un.onUninstSuccess
   HideWindow
