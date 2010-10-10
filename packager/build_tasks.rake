@@ -12,7 +12,7 @@ TEMPLATE_DIR = File.join ROOT_DIR, "packager", "templates"
 LIB_DIR = File.join ROOT_DIR, "lib"
 TARGET_LIB_DIR = File.join TARGET_DIR, "lib"
 
-FILE_LIST = ["config/", "lib/", "script/", "vendor/", "tools/", "Gemfile", "Gemfile.lock", "VERSION", "LICENSE"]
+FILE_LIST = ["config/", "lib/", "script/", "vendor/", "tools/", "docs/", "Gemfile", "Gemfile.lock", "VERSION", "LICENSE"]
 
 LOCAL_SOURCE_GEMS = {
   "actionmailer_extensions" => "~/development/archived/actionmailer_extensions",
