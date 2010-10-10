@@ -9,6 +9,7 @@ A bundle of gems for a sonar-connector installation. This bundle can be used in 
 # RUN THE CONNECTOR DIRECTLY
 
 ## Prerequisites
+
 * Java 6
 * Ruby 1.8.7+
 * Rubygems
@@ -44,6 +45,8 @@ A bundle of gems for a sonar-connector installation. This bundle can be used in 
 
 ## Pre-build steps
 
+1. Special JRuby build including bundler gem
+
 Before you build the package you need to configure the versions of bundler and jruby that are being used in the package. In order to keep the dependencies as minimal as possible, a special build of JRuby is required with the bundler gem built into it. 
 
 Craig McMillan has created this build of JRuby and it has been included in this bundle. Thus the versions of JRuby and bundler specified below don't need to be changed if you use the same JRuby file in the lib folder.
@@ -54,6 +57,10 @@ Edit Rakefile and set these constants to the correct values, e.g.:
   BUNDLER_VERSION = "bundler-1.0.0"
   JRUBY_FILENAME = "jruby-complete-1.5.2-bundler-1.0.0.jar"
 </pre>
+
+2. Include any other Sonar connector gems
+
+Include any other Sonar connector gems (either from Trampoline Systems or written by yourself) by editing the Gemfile. Note that any gems not listed in the Gemfile won't be bundled into the resulting Linux or Windows deployment, i.e. if you want the connector to pull from MS Exchange then you must include the gem 'sonar-exchange-pull-connector'.
 
 ## Build the Windows package
 
