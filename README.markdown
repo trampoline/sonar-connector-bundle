@@ -1,4 +1,5 @@
-# OVERVIEW
+OVERVIEW
+========
 
 A bundle of gems for a sonar-connector installation. This bundle can be used in three ways:
 
@@ -6,7 +7,8 @@ A bundle of gems for a sonar-connector installation. This bundle can be used in 
 2. Build a windows deployment package
 3. Build a linux deployment package
 
-# RUN THE CONNECTOR DIRECTLY
+RUN THE CONNECTOR DIRECTLY
+==========================
 
 ## Prerequisites
 
@@ -17,24 +19,27 @@ A bundle of gems for a sonar-connector installation. This bundle can be used in 
 
 ## Run steps
 
-1. Checkout the bundle to location on disk
+### 1. Checkout the bundle git repo
 
-2. Install the bundle
+### 2. Install the bundle
 
 <pre>
   ./tools/bundle_install
 </pre>
 
-3. Edit config/config.json and set up the connector according to your needs. See the MANUAL for more details.
+### 3. Edit connector config
 
-4. Start the connector framework
+Edit config/config.json and set up the connector according to your needs. See the MANUAL for more details.
+
+### 4. Start the connector
 
 <pre>
   ./tools/start
 </pre>
 
 
-# BUILD THE CONNECTOR PACKAGES
+BUILD THE CONNECTOR PACKAGES
+============================
 
 ## Prerequisites
 
@@ -45,7 +50,7 @@ A bundle of gems for a sonar-connector installation. This bundle can be used in 
 
 ## Pre-build steps
 
-1. Special JRuby build including bundler gem
+### 1. Special JRuby build including bundler gem
 
 Before you build the package you need to configure the versions of bundler and jruby that are being used in the package. In order to keep the dependencies as minimal as possible, a special build of JRuby is required with the bundler gem built into it. 
 
@@ -58,7 +63,7 @@ Edit Rakefile and set these constants to the correct values, e.g.:
   JRUBY_FILENAME = "jruby-complete-1.5.2-bundler-1.0.0.jar"
 </pre>
 
-2. Include any other Sonar connector gems
+### 2. Include any other Sonar connector gems
 
 Include any other Sonar connector gems (either from Trampoline Systems or written by yourself) by editing the Gemfile. Note that any gems not listed in the Gemfile won't be bundled into the resulting Linux or Windows deployment, i.e. if you want the connector to pull from MS Exchange then you must include the gem 'sonar-exchange-pull-connector'.
 
