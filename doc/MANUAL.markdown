@@ -17,7 +17,7 @@ This document is the installation guide and operating manual for the Sonar Conne
 
 The Sonar Connector service is a JRuby application and has been designed to run on both Windows and Linux (Centos & RHEL). The primary dependency on both platforms is Java 1.6, with additional requirements for a Linux deployment.
 
-## 2.1 Install on Windows
+## 2.1 Installation on Windows
 
 ### 2.1.1 Prerequisites
 
@@ -195,7 +195,7 @@ __NOTE__: This init.d file is a __template__ only and must be edited to reflect 
 When editing the file, be sure to set SONAR\_CONNECTOR\_HOME to the location of the Connector after unzipping, e.g. in this example the line should read:
 
 <pre>
-  SONAR_CONNECTOR_HOME = /home/peter/SonarConnector
+  SONAR_CONNECTOR_HOME=/home/peter/SonarConnector
 </pre>
 
 Now setup the service to run at boot time:
@@ -279,7 +279,7 @@ Typically, all the connectors that are required for your deployment will have be
     <td>gem</td>
     <td>[sonar\_exchange\_pull\_connector](http://github.com/trampoline/sonar-exchange-pull-connector)</td>
   </tr>
-<table>
+</table>
 
 ## 3.4 Example configuration
 
