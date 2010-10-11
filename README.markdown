@@ -13,7 +13,7 @@ RUN THE CONNECTOR DIRECTLY
 ## Prerequisites
 
 * Java 6
-* Ruby 1.8.7+
+* Ruby 1.8.5+
 * Rubygems
 * gems: bundler
 

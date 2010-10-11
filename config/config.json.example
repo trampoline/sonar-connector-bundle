@@ -1,52 +1,46 @@
 {
   /* log level must be one of: "debug", "info", "warn", "error", "fatal" */
   "log_level" : "debug",
-  
+
   /* max log file size in megabytes */
   "log_file_max_size" : "10",
-  
+
   /* number of log files to keep */
   "log_files_to_keep" : "7",
-  
+
   "email_settings": {
     "admin_recipients": ["admin@server.local"],
     "admin_sender": "Sonar Connector <noreply@server.local>",
     "perform_deliveries": false,
-    
-    /* options are ["smtp", "sendmail", "test"] */
+
+    /* options are ["smtp", "sendmail"] */
     "delivery_method": "smtp",
-    "save_emails_to_disk": true,
-    
+    "save_emails_to_disk": false,
+
     "smtp_settings": {
       "address": "127.0.0.1",
       "port": 25,
       "domain": "server.local",
       "user_name": null,
       "password": null,
-      
+
       /* options are ["plain", "login", "cram_md5"] */
       "authentication": null
     },
-    
+
     "sendmail_settings": {
       "location": "/usr/sbin/sendmail",
       "arguments": "-i -t -f nobody@localhost"
     }
   },
-  
+
   /* 
-    Specific configuration for each connector. Each connector must have 
+    Specific configuration for each connector instance. Each connector must have 
     a class and a unique name. The require load path can also be specified if necessary.
     Note that each connector type may have further configuration options
     that are specific to the connector class.
   */
   "connectors": [
-    {
-      "class": "Sonar::Connector::DummyConnector",
-      "name": "dummy_connector1",
-      "repeat_delay": 10
-    },
-
     {
       "class": "Sonar::Connector::ImapPullConnector",
       "require": "sonar_imap_pull_connector",
@@ -54,7 +48,7 @@
       "repeat_delay": 10,
       "host": "imap.gmail.com",
       "user": "foo@foo.com",
-      "password": "blahblah",
+      "password": "--",
       "folders": "[Gmail]/All Mail"
     },
 
@@ -65,14 +59,13 @@
       "repeat_delay": 10,
       "source_connectors": ["imap_gmail"],
       "uri": "http://localhost:3000/api/1_0/rfc822_messages",
-      "connector_credentials": "blahblah"
+      "connector_credentials": "--"
     },
-    
+
     {
       "class": "Sonar::Connector::SeppukuConnector",
       "name": "seppuku",
-      "repeat_delay": 43200,
-      "enabled": true
+      "repeat_delay": 43200
     }
   ] 
 }
