@@ -3,13 +3,13 @@ require 'fileutils'
 
 namespace :gems do
 
-  def all_submodule_gems
+  def all_submodules
     status = `git submodule status`
     status.lines.map(&:chomp).map(&:split).map{|commit,submodule| submodule}
   end
 
   def all_submodule_paths
-    all_submodule_gems.map{|submodule| File.expand_path("../#{submodule}", __FILE__)}
+    all_submodules.map{|submodule| File.expand_path("../#{submodule}", __FILE__)}
   end
 
   desc "clean all connector gems"
@@ -33,7 +33,7 @@ namespace :gems do
 
   desc "remove all connector gems from the bundle cache"
   task :uncache_all do
-    all_submodule_gems.each do |submodule|
+    all_submodules.each do |submodule|
       gem_glob = File.expand_path("../vendor/cache/#{submodule.gsub('-','_')}-*", __FILE__)
       $stderr << "removing: #{gem_glob}\n"
       FileUtils.rm_f(Dir.glob(gem_glob))
