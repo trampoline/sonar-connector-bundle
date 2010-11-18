@@ -30,7 +30,7 @@ end
 namespace :build do
   
   desc "pre build steps for both Windows and Linux deployments"
-  task :pre => [:clean, :copy, :wipe_build_bundle, :install_build_bundle] do
+  task :pre => ["gems:rebuild_all", :clean, :copy, :wipe_build_bundle, :install_build_bundle] do
     puts "Moving vendor/bundle/ruby to vendor/bundle/jruby"
     FileUtils.mv File.join(TARGET_BUNDLE_DIR, "ruby"), File.join(TARGET_BUNDLE_DIR, "jruby")
   
@@ -98,24 +98,4 @@ desc "Install the build bundle"
 task :install_build_bundle do
   puts "Installing the build bundle"
   `cd #{TARGET_DIR}; bundle install vendor/bundle --local --no-prune --no-cache`
-end
-
-desc "Re-build all of the LOCAL_SOURCE_GEMS and freshen the vendor cache with them"
-task :freshen_local_source_gems do
-  puts "Re-building LOCAL_SOURCE_GEMS and freshening the vendor cache"
-  LOCAL_SOURCE_GEMS.each do |gem_name, path|
-    
-    f = File.expand_path path
-    
-    # build the source gem
-    FileUtils.cd(f) {
-      puts "Cleaning and rebuilding gem inside #{f}"
-      FileUtils.rm_rf File.join('.', 'pkg')
-      `rake build`
-    }
-    
-    puts "Refreshing gem #{gem_name} in #{VENDOR_CACHE_DIR}"
-    FileUtils.rm_f File.join(VENDOR_CACHE_DIR, "#{gem_name}*")
-    FileUtils.cp_r Dir.glob(File.join f, "pkg", "*"), VENDOR_CACHE_DIR
-  end
 end
