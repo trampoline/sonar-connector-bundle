@@ -1,0 +1,18 @@
+[submodule "sonar-connector-filestore"]
+	path = sonar-connector-filestore
+	url = git@github.com:trampoline/sonar-connector-filestore.git
+[submodule "sonar-connector"]
+	path = sonar-connector
+	url = git@github.com:trampoline/sonar-connector.git
+[submodule "sonar-exchange-pull-connector"]
+	path = sonar-exchange-pull-connector
+	url = git@github.com:trampoline/sonar-exchange-pull-connector.git
+[submodule "sonar-imap-pull-connector"]
+	path = sonar-imap-pull-connector
+	url = git@github.com:trampoline/sonar-imap-pull-connector.git
+[submodule "sonar-ping-connector"]
+	path = sonar-ping-connector
+	url = git@github.com:trampoline/sonar-ping-connector.git
+[submodule "sonar-push-connector"]
+	path = sonar-push-connector
+	url = git@github.com:trampoline/sonar-push-connector.git
