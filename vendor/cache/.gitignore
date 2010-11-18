@@ -1,0 +1,6 @@
+sonar_connector-*
+sonar_connector_filestore-*
+sonar_exchange_pull_connector-*
+sonar_imap_pull_connector-*
+sonar_ping_connector-*
+sonar_push_connector-*
