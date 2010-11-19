@@ -9,9 +9,7 @@ GEM
       activesupport (= 2.3.8)
       rack (~> 1.1.0)
     activesupport (2.3.8)
-    bouncy-castle-java (1.5.0145.2)
-    jruby-openssl (0.7.2)
-      bouncy-castle-java
+    jruby-openssl (0.7)
     json_pure (1.4.3)
     rack (1.1.0)
     sonar_connector (0.8.3)
@@ -45,7 +43,7 @@ DEPENDENCIES
   actionmailer
   actionmailer_extensions
   activesupport
-  jruby-openssl
+  jruby-openssl (= 0.7)
   json_pure
   sonar_connector
   sonar_exchange_pull_connector
