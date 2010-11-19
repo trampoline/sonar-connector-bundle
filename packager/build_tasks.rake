@@ -1,6 +1,8 @@
 # Set these constants
-BUNDLER_VERSION = "bundler-1.0.0"
-JRUBY_FILENAME = "jruby-complete-1.5.2-bundler-1.0.0.jar"
+JRUBY_FILENAME = File.basename(Dir[File.expand_path("../../lib/jruby-complete-*", __FILE__)].first)
+$stderr << "JRUBY_FILENAME: #{JRUBY_FILENAME}\n"
+BUNDLER_VERSION = JRUBY_FILENAME[/jruby-complete-[\d\.]+-(bundler-.+)\.jar/,1]
+$stderr << "BUNDLER_VERSION: #{BUNDLER_VERSION}\n"
 
 ROOT_DIR = File.expand_path '..', File.dirname(__FILE__)
 BUILD_DIR = File.join ROOT_DIR, "build"

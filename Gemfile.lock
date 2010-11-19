@@ -9,7 +9,9 @@ GEM
       activesupport (= 2.3.8)
       rack (~> 1.1.0)
     activesupport (2.3.8)
-    jruby-openssl (0.7)
+    bouncy-castle-java (1.5.0145.2)
+    jruby-openssl (0.7.2)
+      bouncy-castle-java
     json_pure (1.4.3)
     rack (1.1.0)
     sonar_connector (0.8.3)
