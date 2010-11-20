@@ -1,14 +1,14 @@
 # run with: god -c ./config/connector.god -l log/god.log --log-level=info
 
-CONNECTOR_ROOT = File.expand_path(File.join File.dirname(__FILE__), '..')
-God.pid_file_directory = File.join CONNECTOR_ROOT, 'var', 'pids'
-FileUtils.mkdir_p God.pid_file_directory
+CONNECTOR_ROOT = File.expand_path("../..", __FILE__)
+God.pid_file_directory = File.join(CONNECTOR_ROOT, 'var', 'pids')
+FileUtils.mkdir_p( God.pid_file_directory )
 
 God.watch do |w|
   w.name = "sonar-connector"
   w.interval = 30.seconds # default
   
-  w.start = %Q{exec java -jar #{CONNECTOR_ROOT}/lib/jruby-complete.jar -e "require '#{CONNECTOR_ROOT}/lib/jruby_boot'" > #{CONNECTOR_ROOT}/log/stdout_stderr.log 2>&1}
+  w.start = %Q{exec java -jar #{CONNECTOR_ROOT}/lib/jruby-complete.jar -e "require '#{CONNECTOR_ROOT}/lib/jruby_start'" > #{CONNECTOR_ROOT}/log/stdout_stderr.log 2>&1}
   # w.stop = "kill `cat #{File.join God.pid_file_directory, w.name + '.pid'}`"
   # w.restart = nil # restart is a call to stop followed by a call to start
   # w.pid_file = nil # no pid file cos we want god to daemonize this process for us
