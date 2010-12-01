@@ -16,3 +16,9 @@
 [submodule "sonar-push-connector"]
 	path = sonar-push-connector
 	url = git@github.com:trampoline/sonar-push-connector.git
+[submodule "sonar-rexchange"]
+	path = sonar-rexchange
+	url = git@github.com:trampoline/sonar-rexchange.git
+[submodule "actionmailer_extensions"]
+	path = actionmailer_extensions
+	url = git@github.com:trampoline/actionmailer_extensions.git
