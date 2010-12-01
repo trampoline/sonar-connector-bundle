@@ -1,28 +1,30 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (2.3.8)
-      actionpack (= 2.3.8)
-    actionmailer_extensions (0.4.2)
-      actionmailer (<= 2.3.8)
-    actionpack (2.3.8)
-      activesupport (= 2.3.8)
+    actionmailer (2.3.10)
+      actionpack (= 2.3.10)
+    actionmailer_extensions (0.4.3)
+      actionmailer (<= 2.3.10)
+    actionpack (2.3.10)
+      activesupport (= 2.3.10)
       rack (~> 1.1.0)
-    activesupport (2.3.8)
-    jruby-openssl (0.7)
-    json_pure (1.4.3)
+    activesupport (2.3.10)
+    bouncy-castle-java (1.5.0145.2)
+    jruby-openssl (0.7.1)
+      bouncy-castle-java
+    json_pure (1.4.6)
     rack (1.1.0)
     sonar_connector (0.8.3)
-      actionmailer (= 2.3.8)
+      actionmailer (= 2.3.10)
       actionmailer_extensions (>= 0.4.2)
       json_pure (>= 1.2.2)
       sonar_connector_filestore (>= 0.1.0)
       uuidtools (>= 2.1.1)
     sonar_connector_filestore (0.2.0)
-    sonar_exchange_pull_connector (0.5.5)
-      activesupport (>= 2.3.5)
+    sonar_exchange_pull_connector (0.5.6)
+      activesupport (= 2.3.10)
       json_pure (>= 1.2.2)
-      sonar_connector (>= 0.5.1)
+      sonar_connector (>= 0.7.2)
       sonar_rexchange (>= 0.3.7)
     sonar_imap_pull_connector (0.1.7)
       activesupport (>= 2.3.5)
@@ -32,21 +34,21 @@ GEM
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
       sonar_connector (>= 0.5.1)
-    sonar_rexchange (0.3.7)
+    sonar_rexchange (0.3.8)
     uuidtools (2.1.1)
 
 PLATFORMS
-  java
   ruby
 
 DEPENDENCIES
-  actionmailer
-  actionmailer_extensions
-  activesupport
-  jruby-openssl (= 0.7)
+  actionmailer (= 2.3.10)
+  actionmailer_extensions (= 0.4.3)
+  activesupport (= 2.3.10)
+  jruby-openssl (= 0.7.1)
   json_pure
   sonar_connector
   sonar_exchange_pull_connector
   sonar_imap_pull_connector
   sonar_push_connector
+  sonar_rexchange (= 0.3.8)
   uuidtools
