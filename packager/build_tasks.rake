@@ -15,6 +15,8 @@ LIB_DIR = File.join ROOT_DIR, "lib"
 TARGET_LIB_DIR = File.join TARGET_DIR, "lib"
 
 FILE_LIST = ["config/", "lib/", "vendor/", "tools/", "doc/", "Gemfile", "Gemfile.lock", "VERSION", "LICENSE"]
+DELETE_FILE_LIST = ["**/*~", "config/config.json"] # delete files matching these globs from the target
+COPY_FILE_LIST = [["config/config.json.example", "config/config.json"]] # make these copies in the target
 
 LOCAL_SOURCE_GEMS = {
   "actionmailer_extensions" => "~/development/archived/actionmailer_extensions",
@@ -86,6 +88,22 @@ task :copy do
   FileUtils.mkdir_p TARGET_DIR
   FILE_LIST.each do |f|
     FileUtils.cp_r f, TARGET_DIR
+  end
+
+  Dir.chdir(TARGET_DIR) do
+    DELETE_FILE_LIST.each do |gl|
+      Dir[gl].each do |f|
+        File.delete(f)
+      end
+    end
+
+    COPY_FILE_LIST.each do |from,to|
+      File.open(from,"r") do |ins|
+        File.open(to, "w") do |outs|
+          outs << ins.read
+        end
+      end
+    end
   end
 end
 

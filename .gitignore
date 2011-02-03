@@ -6,3 +6,4 @@
 /var
 /build
 /.redcar
+.DS_Store
