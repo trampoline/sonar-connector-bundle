@@ -22,3 +22,6 @@
 [submodule "actionmailer_extensions"]
 	path = actionmailer_extensions
 	url = git@github.com:trampoline/actionmailer_extensions.git
+[submodule "sonar-ews-pull-connector"]
+	path = sonar-ews-pull-connector
+	url = git@github.com:trampoline/sonar-ews-pull-connector.git
