@@ -10,17 +10,42 @@ GEM
       rack (~> 1.1.0)
     activesupport (2.3.10)
     bouncy-castle-java (1.5.0145.2)
+    builder (3.0.0)
+    crack (0.1.8)
+    fetch_in (0.2.0)
+    gyoku (0.3.1)
+      builder (>= 2.1.2)
+    httpclient (2.1.6.1.1)
+    httpi (0.9.0)
+      ntlm-http (>= 0.1.1)
+      rack
     jruby-openssl (0.7.1)
       bouncy-castle-java
-    json_pure (1.4.6)
-    rack (1.1.0)
-    sonar_connector (0.8.3)
+    json_pure (1.5.1)
+    ntlm-http (0.1.1.2)
+    rack (1.1.2)
+    rews (0.2.5)
+      fetch_in (>= 0.2.0)
+      ntlm-http (>= 0.1.1.1)
+      savon (>= 0.8.6)
+    savon (0.8.6)
+      builder (>= 2.1.2)
+      crack (~> 0.1.8)
+      gyoku (>= 0.3.0)
+      httpi (>= 0.7.8)
+    sonar_connector (0.8.4)
       actionmailer (= 2.3.10)
       actionmailer_extensions (>= 0.4.2)
       json_pure (>= 1.2.2)
       sonar_connector_filestore (>= 0.1.0)
       uuidtools (>= 2.1.1)
     sonar_connector_filestore (0.2.0)
+    sonar_ews_pull_connector (0.1.0)
+      fetch_in (>= 0.2.0)
+      httpclient (>= 2.1.6.1.1)
+      ntlm-http (>= 0.1.1)
+      savon (>= 0.8.6)
+      sonar_connector (>= 0.7.2)
     sonar_exchange_pull_connector (0.5.6)
       activesupport (= 2.3.10)
       json_pure (>= 1.2.2)
@@ -35,7 +60,7 @@ GEM
       json_pure (>= 1.2.2)
       sonar_connector (>= 0.5.1)
     sonar_rexchange (0.3.8)
-    uuidtools (2.1.1)
+    uuidtools (2.1.2)
 
 PLATFORMS
   java
@@ -45,9 +70,13 @@ DEPENDENCIES
   actionmailer (= 2.3.10)
   actionmailer_extensions (= 0.4.3)
   activesupport (= 2.3.10)
+  httpclient (= 2.1.6.1.1)
   jruby-openssl (= 0.7.1)
   json_pure
+  ntlm-http (= 0.1.1.2)
+  rews
   sonar_connector
+  sonar_ews_pull_connector
   sonar_exchange_pull_connector
   sonar_imap_pull_connector
   sonar_push_connector
