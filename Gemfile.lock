@@ -24,7 +24,7 @@ GEM
     json_pure (1.5.1)
     ntlm-http (0.1.1.2)
     rack (1.1.2)
-    rews (0.2.5)
+    rews (0.2.6)
       fetch_in (>= 0.2.0)
       ntlm-http (>= 0.1.1.1)
       savon (>= 0.8.6)
