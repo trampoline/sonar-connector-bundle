@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf vendor/bundle
 rake gems:rebuild_all
 bundle install vendor/bundle --local --no-prune --no-cache
 cp -R vendor/bundle/ruby vendor/bundle/jruby
