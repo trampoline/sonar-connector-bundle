@@ -8,7 +8,7 @@ God.watch do |w|
   w.name = "sonar-connector"
   w.interval = 30.seconds # default
   
-  w.start = %Q{exec java -jar #{CONNECTOR_ROOT}/lib/jruby-complete.jar -e "require '#{CONNECTOR_ROOT}/lib/jruby_start'" > #{CONNECTOR_ROOT}/log/stdout_stderr.log 2>&1}
+  w.start = %Q{exec java -Xmx1000m -jar #{CONNECTOR_ROOT}/lib/jruby-complete.jar -e "require '#{CONNECTOR_ROOT}/lib/jruby_start'" > #{CONNECTOR_ROOT}/log/stdout_stderr.log 2>&1}
   # w.stop = "kill `cat #{File.join God.pid_file_directory, w.name + '.pid'}`"
   # w.restart = nil # restart is a call to stop followed by a call to start
   # w.pid_file = nil # no pid file cos we want god to daemonize this process for us
@@ -27,12 +27,12 @@ God.watch do |w|
   
   w.restart_if do |restart|
     restart.condition(:memory_usage) do |c|
-      c.above = 500.megabytes
+      c.above = 1000.megabytes
       c.times = [3, 5] # 3 out of 5 intervals
     end
   
     restart.condition(:cpu_usage) do |c|
-      c.above = 50.percent
+      c.above = 75.percent
       c.times = 5
     end
   end
