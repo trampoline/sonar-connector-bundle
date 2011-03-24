@@ -46,6 +46,7 @@ GEM
       fetch_in (>= 0.2.0)
       httpclient (>= 2.1.6.1.1)
       ntlm-http (>= 0.1.1)
+      rfc822_util (>= 0.1.1)
       savon (>= 0.8.6)
       sonar_connector (>= 0.7.2)
     sonar_exchange_pull_connector (0.5.6)
