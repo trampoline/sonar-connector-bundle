@@ -1,2 +1,2 @@
 #!/bin/bash
-java -Xmx1000m -jar lib/jruby-complete.jar -e "require 'lib/jruby_start_console'"
+java -Djruby.jit.threshold=3 -Xmx1000m -jar lib/jruby-complete.jar -e "require 'lib/jruby_start_console'"
