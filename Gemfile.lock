@@ -19,12 +19,12 @@ GEM
     httpi (0.9.0)
       ntlm-http (>= 0.1.1)
       rack
-    jruby-openssl (0.7.1)
+    jruby-openssl (0.7.3)
       bouncy-castle-java
     json_pure (1.5.1)
     ntlm-http (0.1.1.2)
     rack (1.1.2)
-    rews (0.2.7)
+    rews (0.2.10)
       fetch_in (>= 0.2.0)
       ntlm-http (>= 0.1.1.1)
       savon (>= 0.8.6)
@@ -74,7 +74,7 @@ DEPENDENCIES
   actionmailer_extensions (= 0.4.3)
   activesupport (= 2.3.10)
   httpclient (= 2.1.6.1.1)
-  jruby-openssl (= 0.7.1)
+  jruby-openssl (= 0.7.3)
   json_pure
   ntlm-http (= 0.1.1.2)
   rews
