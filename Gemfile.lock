@@ -66,6 +66,7 @@ GEM
     uuidtools (2.1.2)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
