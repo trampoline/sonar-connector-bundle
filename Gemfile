@@ -14,6 +14,6 @@ gem "sonar_exchange_pull_connector"
 gem "sonar_ews_pull_connector"
 gem "sonar_imap_pull_connector"
 gem "sonar_push_connector"
-gem "sonar_rexchange", "0.3.8"
+gem "sonar_rexchange"
 gem "uuidtools"
 
