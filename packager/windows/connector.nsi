@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Sonar Connector"
-!define PRODUCT_VERSION "0.9.0"
+!define PRODUCT_VERSION "0.9.1"
 !define PRODUCT_PUBLISHER "Trampoline Systems"
 !define PRODUCT_WEB_SITE "http://www.trampolinesystems.com"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
