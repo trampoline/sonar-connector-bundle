@@ -58,7 +58,7 @@ GEM
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
       sonar_connector (>= 0.5.1)
-    sonar_push_connector (0.8.1)
+    sonar_push_connector (0.8.2)
       activesupport (>= 2.3.5)
       json_pure (>= 1.2.2)
       sonar_connector (>= 0.5.1)
