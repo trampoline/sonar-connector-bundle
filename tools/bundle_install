@@ -1,5 +1,9 @@
 #!/bin/bash
+JRUBY_VERSION=`ruby -e "puts JRUBY_VERSION if defined?(JRUBY_VERSION)"`
+if [ "" == "$JRUBY_VERSION" ] ; then
+  echo "use JRuby on RVM to install this bundle"
+  exit 1
+fi
 rm -rf vendor/bundle
 rake gems:rebuild_all
-bundle install vendor/bundle --local --no-prune --no-cache
-#cp -R vendor/bundle/ruby vendor/bundle/jruby
+bundle install --path vendor/bundle --local --no-prune --no-cache
